@@ -2,68 +2,6 @@
 
 The DSP Front Door is an enterprise inference system that dynamically loads and executes inference modules based on project manifests from the DSP AI Control Tower.
 
-## Quick Start
-
-### 1. Prerequisites
-
-- Python 3.11+
-- DSP AI Control Tower running (default: `http://localhost:5000`)
-- OpenAI API key
-- Project manifests with `inference_endpoint` modules configured
-
-### 2. Installation
-
-```bash
-# Clone the repository
-git clone <repository-url>
-cd dsp-fd
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Configure environment
-cp .env.example .env
-# Edit .env with your configuration
-```
-
-### 3. Configuration
-
-Edit `.env` file:
-
-```bash
-# Control Tower Configuration
-CONTROL_TOWER_BASE_URL=http://localhost:5000
-CONTROL_TOWER_SUPERUSER_KEY=your-superuser-key
-
-# OpenAI Configuration
-OPENAI_API_KEY=your-openai-api-key
-
-# Front Door Configuration
-FD_HOST=0.0.0.0
-FD_PORT=8000
-FD_LOG_LEVEL=INFO
-
-# Security (optional)
-FD_API_KEY=your-fd-api-key
-```
-
-### 4. Start the Server
-
-**Development Mode:**
-```bash
-python start_server.py --dev --reload
-```
-
-**Production Mode:**
-```bash
-python main.py
-```
-
-**Docker:**
-```bash
-docker-compose up
-```
-
 ## API Usage
 
 ### Authentication
@@ -78,29 +16,7 @@ curl -H "X-API-Key: your-fd-api-key" http://localhost:8000/health
 curl -H "Authorization: Bearer your-fd-api-key" http://localhost:8000/health
 ```
 
-### Core Endpoints
-
-#### 1. Health Check
-```bash
-curl http://localhost:8000/health
-```
-
-#### 2. System Status
-```bash
-curl http://localhost:8000/status
-```
-
-#### 3. List Projects
-```bash
-curl http://localhost:8000/projects
-```
-
-#### 4. Get Project Manifest
-```bash
-curl http://localhost:8000/projects/ai-customer-service/manifest
-```
-
-#### 5. Execute Inference
+#### Execute Inference
 ```bash
 curl -X POST http://localhost:8000/inference \
   -H "Content-Type: application/json" \
@@ -148,14 +64,6 @@ Projects must have an `inference_endpoint` module in their manifest:
 - `gpt-4-turbo-preview`
 - `gpt-3.5-turbo`
 - Custom OpenAI-compatible endpoints
-
-### Configuration Options
-- `model_name`: Model identifier
-- `endpoint_url`: API endpoint URL
-- `system_prompt`: System prompt for the model
-- `max_tokens`: Maximum tokens to generate
-- `temperature`: Randomness (0.0-2.0)
-- `top_p`: Nucleus sampling (0.0-1.0)
 
 ## Python Client Usage
 
@@ -213,7 +121,7 @@ The API returns structured error responses:
 ### Logging
 The system uses structured logging with JSON output in production:
 
-```json
+```cv json
 {
   "event": "Inference completed successfully",
   "project_id": "ai-customer-service",

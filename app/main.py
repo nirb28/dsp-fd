@@ -9,6 +9,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
+from fastapi.openapi.docs import get_swagger_ui_html
+from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.config import config
@@ -75,18 +77,25 @@ async def lifespan(app: FastAPI):
 
 # Create FastAPI application
 app = FastAPI(
-    title="DSP Front Door",
+    title="DSPAI - Front Door",
     description="Enterprise inference system front door that dynamically loads and executes inference modules based on project manifests",
     version="1.0.0",
     lifespan=lifespan,
-    docs_url="/docs",
-    redoc_url="/redoc",
-    openapi_url="/openapi.json"
+    docs_url=None,
+    redoc_url=None
 )
+#app = FastAPI(title="DSPAI - Control Tower", docs_url=None, redoc_url=None)
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
+@app.get("/docs", include_in_schema=False)
+async def swagger_ui_html():
+    return get_swagger_ui_html(
+        openapi_url="/openapi.json",
+        title="DSPAI - Front Door",
+        swagger_favicon_url="/static/fd.ico"
+    )
 
 # Add middleware in reverse order (last added = first executed)
-
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
