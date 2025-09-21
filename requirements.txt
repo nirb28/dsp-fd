@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pydantic
+httpx==0.25.2
+python-dotenv==1.0.0
+structlog==23.2.0
+tenacity==8.2.3
+openai==1.6.0
